@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fractal Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Fractal Generator</h1>
+    <div id="controls">
+        <label for="fractal-type">Fractal type:</label>
+        <select id="fractal-type">
+            <option value="mandelbrot">Mandelbrot</option>
+            <option value="julia">Julia</option>
+        </select>
+        <label for="iterations">Iterations:</label>
+        <input type="number" id="iterations" value="100" min="10" max="1000">
+        <label for="julia-c">Julia constant (for Julia set):</label>
+        <input type="text" id="julia-c" value="-0.8+0.156i">
+        <button id="render">Render</button>
+    </div>
+    <canvas id="canvas" width="800" height="600"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
