@@ -1,9 +1,20 @@
 function parseComplex(str) {
     const match = str.match(/([+-]?\d*\.?\d+)([+-]\d*\.?\d+)i/);
     if (!match) {
-        return {re: -0.8, im: 0.156};
+        return { re: -0.8, im: 0.156 };
     }
-    return {re: parseFloat(match[1]), im: parseFloat(match[2])};
+    return { re: parseFloat(match[1]), im: parseFloat(match[2]) };
+}
+
+function calculateIterations(zx, zy, cx, cy, iterCount) {
+    let i = 0;
+    while (zx * zx + zy * zy <= 4 && i < iterCount) {
+        const tmp = zx * zx - zy * zy + cx;
+        zy = 2 * zx * zy + cy;
+        zx = tmp;
+        i++;
+    }
+    return i;
 }
 
 function draw() {
@@ -28,17 +39,7 @@ function draw() {
                 cy = juliaC.im;
             }
 
-            let i = 0;
-            while (zx * zx + zy * zy <= 4 && i < iterCount) {
-                const tmp = zx * zx - zy * zy + cx;
-                zy = 2 * zx * zy + cy;
-                zx = tmp;
-                if (type === 'mandelbrot') {
-                    cx = (x - width / 2) * 4 / width;
-                    cy = (y - height / 2) * 4 / width;
-                }
-                i++;
-            }
+            const i = calculateIterations(zx, zy, cx, cy, iterCount);
 
             const pixelIndex = (y * width + x) * 4;
             const color = i === iterCount ? 0 : 255 - Math.floor(255 * i / iterCount);
@@ -51,5 +52,11 @@ function draw() {
     ctx.putImageData(imageData, 0, 0);
 }
 
-document.getElementById('render').addEventListener('click', draw);
-window.addEventListener('load', draw);
+if (typeof document !== 'undefined') {
+    document.getElementById('render').addEventListener('click', draw);
+    window.addEventListener('load', draw);
+}
+
+if (typeof module !== 'undefined') {
+    module.exports = { parseComplex, calculateIterations };
+}
