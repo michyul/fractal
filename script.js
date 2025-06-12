@@ -104,6 +104,23 @@ if (typeof document !== 'undefined') {
     window.addEventListener('load', draw);
 }
 
+function drawRandom(canvas) {
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const imageData = ctx.createImageData(width, height);
+
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        const color = Math.floor(Math.random() * 256);
+        imageData.data[i] = color;
+        imageData.data[i + 1] = color;
+        imageData.data[i + 2] = color;
+        imageData.data[i + 3] = 255;
+    }
+    ctx.putImageData(imageData, 0, 0);
+    return imageData;
+}
+
 if (typeof module !== 'undefined') {
-    module.exports = { parseComplex, calculateIterations };
+    module.exports = { parseComplex, calculateIterations, drawRandom };
 }
