@@ -30,13 +30,17 @@ function draw() {
 
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            let zx = (x - width / 2) * 4 / width;
-            let zy = (y - height / 2) * 4 / width;
-            let cx = zx;
-            let cy = zy;
+            let zx, zy;
+            let cx = (x - width / 2) * 4 / width;
+            let cy = (y - height / 2) * 4 / width;
             if (type === 'julia') {
+                zx = cx;
+                zy = cy;
                 cx = juliaC.re;
                 cy = juliaC.im;
+            } else {
+                zx = 0;
+                zy = 0;
             }
 
             const i = calculateIterations(zx, zy, cx, cy, iterCount);
