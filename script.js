@@ -17,6 +17,31 @@ function calculateIterations(zx, zy, cx, cy, iterCount) {
     return i;
 }
 
+function hsvToRgb(h, s, v) {
+    let f = (n, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
+    return [f(5) * 255, f(3) * 255, f(1) * 255];
+}
+
+function randomJuliaConstant() {
+    // Random value in a visually interesting range
+    const re = (Math.random() - 0.5) * 2;
+    const im = (Math.random() - 0.5) * 2;
+    return { re, im };
+}
+
+function formatComplex(c) {
+    return `${c.re.toFixed(3)}${c.im >= 0 ? '+' : ''}${c.im.toFixed(3)}i`;
+}
+
+let mandelbrotSeed = { centerX: 0, centerY: 0, zoom: 1 };
+
+function randomizeMandelbrotSeed() {
+    // Slightly randomize center and zoom for each render
+    mandelbrotSeed.centerX = (Math.random() - 0.5) * 2;
+    mandelbrotSeed.centerY = (Math.random() - 0.5) * 2;
+    mandelbrotSeed.zoom = 0.5 + Math.random() * 1.5;
+}
+
 function draw() {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -26,26 +51,48 @@ function draw() {
 
     const type = document.getElementById('fractal-type').value;
     const iterCount = parseInt(document.getElementById('iterations').value, 10);
-    const juliaC = parseComplex(document.getElementById('julia-c').value);
+    let juliaC;
+
+    if (type === 'julia') {
+        // Randomize Julia constant and update input
+        juliaC = randomJuliaConstant();
+        document.getElementById('julia-c').value = formatComplex(juliaC);
+    } else {
+        // Mandelbrot: randomize seed
+        randomizeMandelbrotSeed();
+    }
 
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            let zx = (x - width / 2) * 4 / width;
-            let zy = (y - height / 2) * 4 / width;
-            let cx = zx;
-            let cy = zy;
+            let zx, zy, cx, cy;
             if (type === 'julia') {
+                zx = (x - width / 2) * 4 / width;
+                zy = (y - height / 2) * 4 / width;
                 cx = juliaC.re;
                 cy = juliaC.im;
+            } else {
+                // Mandelbrot: use randomized center and zoom
+                zx = mandelbrotSeed.centerX + (x - width / 2) * (4 / mandelbrotSeed.zoom) / width;
+                zy = mandelbrotSeed.centerY + (y - height / 2) * (4 / mandelbrotSeed.zoom) / width;
+                cx = zx;
+                cy = zy;
             }
 
             const i = calculateIterations(zx, zy, cx, cy, iterCount);
-
             const pixelIndex = (y * width + x) * 4;
-            const color = i === iterCount ? 0 : 255 - Math.floor(255 * i / iterCount);
-            imageData.data[pixelIndex] = color;
-            imageData.data[pixelIndex + 1] = color;
-            imageData.data[pixelIndex + 2] = color;
+            if (i === iterCount) {
+                // Inside set: black
+                imageData.data[pixelIndex] = 0;
+                imageData.data[pixelIndex + 1] = 0;
+                imageData.data[pixelIndex + 2] = 0;
+            } else {
+                // Colorful gradient
+                const hue = 360 * i / iterCount;
+                const rgb = hsvToRgb(hue, 1, 1);
+                imageData.data[pixelIndex] = rgb[0];
+                imageData.data[pixelIndex + 1] = rgb[1];
+                imageData.data[pixelIndex + 2] = rgb[2];
+            }
             imageData.data[pixelIndex + 3] = 255;
         }
     }
