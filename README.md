@@ -4,6 +4,6 @@ This project contains a simple web-based fractal image generator implemented in 
 
 ## Usage
 
-Open `index.html` in a modern web browser. Select the fractal type, adjust the iteration count and (for Julia set) a complex constant, then click **Render** to generate the fractal.
+Open `index.html` in a modern web browser. The fractal image is drawn automatically when the page loads. Select the fractal type, adjust the iteration count and (for Julia set) a complex constant. Clicking **Render** redraws the fractal with the current settings.
 
 The rendering runs entirely in the browser.
