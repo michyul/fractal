@@ -1,0 +1,13 @@
+{
+  "name": "fractal",
+  "version": "1.0.0",
+  "description": "This project contains a simple web-based fractal image generator implemented in HTML and JavaScript. It can render Mandelbrot and Julia sets on a canvas element.",
+  "main": "script.js",
+  "scripts": {
+    "test": "node test/script.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
