@@ -9,3 +9,12 @@ Open `index.html` in a modern web browser. Select the fractal type, choose **Fra
 When **Random Colors** mode is selected a new pattern will be drawn each time the page is refreshed.
 
 The rendering runs entirely in the browser.
+
+## Development
+
+Run the unit tests with:
+
+```bash
+npm test
+```
+

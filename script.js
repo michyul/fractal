@@ -17,8 +17,8 @@ function calculateIterations(zx, zy, cx, cy, iterCount) {
     return i;
 }
 
-function drawRandom() {
-    const canvas = document.getElementById('canvas');
+function drawRandom(canvas = (typeof document !== 'undefined' ? document.getElementById('canvas') : null)) {
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
@@ -42,7 +42,7 @@ function draw() {
 
     const mode = document.getElementById('mode').value;
     if (mode === 'random') {
-        drawRandom();
+        drawRandom(canvas);
         return;
     }
 
@@ -80,5 +80,5 @@ if (typeof document !== 'undefined') {
 }
 
 if (typeof module !== 'undefined') {
-    module.exports = { parseComplex, calculateIterations };
+    module.exports = { parseComplex, calculateIterations, drawRandom };
 }
